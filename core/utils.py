@@ -1,6 +1,6 @@
 """Utils."""
 
-from llama_index.llms import OpenAI, Anthropic, Replicate
+from llama_index.llms import OpenAI, Anthropic, Replicate, LiteLLM
 from llama_index.llms.base import LLM
 from llama_index.llms.utils import resolve_llm
 from pydantic import BaseModel, Field
@@ -93,6 +93,9 @@ def _resolve_llm(llm_str: str) -> LLM:
     elif tokens[0] == "replicate":
         os.environ["REPLICATE_API_KEY"] = st.secrets.replicate_key
         llm = Replicate(model=tokens[1])
+    elif tokens[0] == "togetherai":
+        os.environ["TOGETHERAI_API_KEY"] = st.secrets.togetherai_key
+        llm = LiteLLM(model=tokens[1])
     else:
         raise ValueError(f"LLM {llm_str} not recognized.")
     return llm
